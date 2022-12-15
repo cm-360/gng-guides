@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Importing a vWii NAND Into Dolphin - G&amp;G Guides</title>
+</head>
+<body>
+	<h1>Importing a vWii NAND Into Dolphin</h1>
+	<h2>Section I - Performing a NAND Backup</h2>
+	<h3><i>If you already made a NAND backup of your Wii U, you can safely skip this section.</i></h3>
+	<ol>
+		<li>Download the latest version of <a href="https://tiramisu.foryour.cafe/">Tiramisu</a>.</li>
+		<li>Extract the <code>.zip</code> file and copy the <code>wiiu</code> folder to the root of your console's SD card.</li>
+		<dd>Allow your computer to merge/overwrite anything if prompted.</dd>
+		<li>Reinsert the SD card into your console.</li>
+		<li>Enter the PayloadLoader on your Wii U.</li>
+		<dd>If you have autobooting configured, hold B when powering it on.</dd>
+		<dd>If you do not have autobooting configured, hold B when launching the Health & Safety app.</dd>
+		<li>Select the <code>nanddumper</code> payload.</li>
+		<li>Use the GamePad's D-Pad to select SLCCMPT and OTP, then press A to begin dumping.</li>
+		<dd>The dumping process may take a few minutes.</dd>
+		<li>Power off your console and reinsert its SD card into your computer.</li>
+		<dd>Copy <code>slccmpt.bin</code> and <code>otp.bin</code> onto your computer.</dd>
+		<li>After copying, feel free to delete these files from your SD card to save space.</li>
+	</ol>
+	<h2>Section II - Extracting Your vWii's Keys</h2>
+	<ol>
+		<li>Download the latest version of <a href="https://github.com/CuriousTommy/ShowMiiVWiiKeys/releases">ShowMiiVWiiKeys</a>.</li>
+		<li>Extract the appropriate executable for your computer's operating system from <code>.zip</code> file.</li>
+		<li>Copy your <code>otp.bin</code> into the same directory as the <code>ShowMiiVWiiKeys</code> executable and run it.</li>
+		<li>There should now be two new files: <code>keys.bin</code> and <code>keys.txt</code>. If not, ensure you are using the correct platform executable and have <code>otp.bin</code> in the same directory.</li>
+	</ol>
+	<h2>Section III - Importing the NAND Backup</h2>
+	<ol>
+		<li>If you haven't already, install the latest beta version of <a href="https://dolphin-emu.org/">Dolphin</a>.</li>
+		<dd>Windows users will also need to install the <strong>64-bit Visual C++ redistributable</strong>. Check Dolphin's download page for a link.</dd>
+		<li>Make sure Dolphin is not running, and navigate to its user directory.</li>
+		<dd>For Windows: The default location is <code>Dolphin Emulator</code> in your <code>Documents</code> folder.</dd>
+		<dd>For macOS: The default location is <code>~/Library/Application Support/Dolphin</code>.</dd>
+		<dd>For Linux: The default location is determined by the <strong>XDG Base Directory Specification</strong>, which can vary between distributions (see <a href="https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html">this page</a> for more info). Helpful tip: if the directory <code>~/.dolphin-emu</code> exists, it will be used instead.</dd>
+		<li>Create a new folder named <code>Wii</code> in this directory.</li>
+		<dd>If one exists already, rename it to <code>WiiBackup</code>. For the following steps to work, the <code>Wii</code> directory must be <strong>empty</strong>. Save data will be restored from this backup folder in a later section.</dd>
+		<li>Launch Dolphin.</li>
+		<li>Navigate to "Options" > "Configuration" > "General".</li>
+		<li>Enable "Allow Mismatched Region Settings".</li>
+		<dd>This will prevent Dolphin from possibly generating a new console identity when an out-of-region game is launched, which would reset the 7-day waiting period on Wiimmfi.</dd>
+		<li>Close the settings window and return to Dolphin's main interface.</li>
+		<li>Select "Tools" > "Manage NAND" > "Import BootMii NAND Backup...".</li>
+		<dd>Select your <code>slccmpt.bin</code> file as the BootMii NAND backup file.</dd>
+		<dd>Select your <code>keys.bin</code> file as the BootMii keys file.</dd>
+	</ol>
+	<h2>Section IV - Reparing System Titles</h2>
+	<ol>
+		<li>Download, extract, and run <a href="https://github.com/WiiDatabase/nusdownloader/releases/latest/download/NUSD-Mod-NUS-Fix.zip">NUS Downloader</a>.</li>
+		<dd>macOS/Linux users may need to run this either with <a href="https://www.winehq.org/">Wine</a> or in a virtual machine.</dd>
+		<li>Select "Database..." > "System" > "System Menu", and choose "Latest Version".</li>
+		<dd>Ensure that the "Pack WAD" box is checked on the main app interface.</dd>
+		<li>Press "Start NUS Download!", and wait for it to finish.</li>
+		<li>Select "Database..." > "System" > "Mii Channel" > "41 (All/System)" > "Latest Version".</li>
+		<dd>Ensure that "Pack WAD" is still checked.</dd>
+		<li>Press "Start NUS Download!", and wait for it to finish.</li>
+		<li>In your system's file explorer, navigate to the folder you extracted NUS Downloader into and verify that these WAD files downloaded correctly. The version numbers were the latest at the time of writing and may vary.</li>
+        <dd>Wii Menu: <code>titles/0000000100000002/518/RVL-WiiSystemmenu-v518.wad</code></dd>
+        <dd>Mii Channel: <code>titles/0001000248414341/6/RVL-NigaoeNR-v6.wad</code></dd>
+		<li>Close NUS Downloader and return to Dolphin.</li>
+        <li>Select "Tools" > "Install WAD..."</li>
+        <li>Select your <code>RVL-WiiSystemmenu-v###.wad</code> file to install the Wii Menu.</li>
+        <li>Repeat the previous two steps for <code>RVL-NigaoeNR-v#.wad</code> to install the Mii Channel.</li>
+		<li>Select "Tools" > "Perform Online System Update" > "Current Region".</li>
+	</ol>
+	<h2>Section V - Restoring Existing Dolphin Save Data</h2>
+    <h3><i>This section will replace the save data imported from your NAND backup with your previous Dolphin save data. If you wish to instead keep the save data from your vWii's NAND, you can safely skip this section.</i></h3>
+    TODO
+	<ol>
+		
+	</ol>
+</body>
+</html> 
